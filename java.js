@@ -12,71 +12,102 @@ function getComputerChoice() {
     }
 }
 
-function playRound(playerSelection, computerSelection) {
-    playerSelection = playerSelection.toLowerCase()
-    if (playerSelection == "rock") {
-        if (computerSelection == "rock") {
-            return "Its a draw! Nobody wins this round."
-        }
-        else if (computerSelection == "paper") {
-            scoreIa += 1;
-
-            return "You lose! Paper beats Rock."
-        }
-        else {
-            scoreUser += 1;
-            return "You win! Rock beats Scissors."
-        }
-    }
-    else if (playerSelection == "paper") {
-        if (computerSelection == "rock") {
-            scoreUser += 1;
-            return "You win! Paper beats Rock."
-        }
-        else if (computerSelection == "paper") {
-            return "Its a draw! Nobody wins this round."
-        }
-        else {
-            scoreIa += 1;
-
-            return "You lose! Scissors beats Paper."
-        }
-    }
-    else {
-        if (computerSelection == "rock") {
-            scoreIa += 1;
-
-            return "You lose! Rock beats Scissors."
-        }
-        else if (computerSelection == "paper") {
-            scoreUser += 1;
-            return "You win! Scissors beats Paper."
-        }
-        else {
-            return "Its a draw! Nobody wins this round."
-        }
-    }
-}
-
 let scoreIa = 0;
 let scoreUser = 0;
 
-function game() {
+function playRound(playerSelection, computerSelection = getComputerChoice()) {
+    playerSelection = this.textContent;
+    console.log(playerSelection);
 
-
-    while (scoreIa < 5 && scoreUser < 5) {
-        const playerSelection = prompt("Make your selection(Rock, Paper or Scissor");
-        const computerSelection = getComputerChoice();
-
-        let play = (playRound(playerSelection, computerSelection));   
-        console.log(play, scoreIa, scoreUser)  
+    if (playerSelection == "Rock") {
+        if (computerSelection == "rock") {
+            tie();
+        }
+        else if (computerSelection == "paper") {
+            scoreIa += 1;
+            iaWinsRound();
+            winner();
+        }
+        else {
+            scoreUser += 1;
+            userWinsRound();
+            winner();
+        }
     }
-    if (scoreIa == 5) {
-        return "The computer wins!"
+    else if (playerSelection == "Paper") {
+        if (computerSelection == "rock") {
+            scoreUser += 1;
+            userWinsRound();
+            winner();
+        }
+        else if (computerSelection == "paper") {
+            tie();
+        }
+        else {
+            scoreIa += 1;
+            iaWinsRound();
+            winner();
+        }
     }
     else {
-        return "The user wins!"
+        if (computerSelection == "rock") {
+            scoreIa += 1;
+            iaWinsRound();
+            winner()
+        }
+        else if (computerSelection == "paper") {
+            scoreUser += 1;
+            userWinsRound();
+            winner();
+        }
+        else {
+            tie();
+        }
+    }
+
+}
+
+function winner() {
+    if (scoreIa < 5 && scoreUser < 5) {
+        var element = document.getElementById("score");
+        element.innerHTML = `The score is ${scoreUser} for the User and ${scoreIa} for the IA!`;
+    }
+    else if (scoreIa == 5) {
+        var element = document.getElementById("score");
+        element.innerHTML = `The score is ${scoreUser} for the user and ${scoreIa} for the IA`;
+        var winner = document.getElementById("winner");
+        winner.innerHTML = "The IA wins this game! Better luck next time.";
+        scoreIa = 0;
+        scoreUser = 0;
+    }
+
+    else {
+        var element = document.getElementById("score");
+        element.innerHTML = `The score is ${scoreUser} for the user and ${scoreIa} for the IA`;
+        var winner = document.getElementById("winner");
+        winner.innerHTML = "The User wins this game! I am proud of you!";
+        scoreIa = 0;
+        scoreUser = 0;
     }
 }
 
-console.log(game())
+var btn = document.querySelectorAll('button');
+
+btn.forEach((btn) => {
+    btn.addEventListener('click',playRound);
+  });
+
+function tie() {
+    var winner = document.getElementById("winner");
+    winner.innerHTML = "Its a tie!";
+}
+
+function userWinsRound() {
+    var winner = document.getElementById("winner");
+    winner.innerHTML = "The user wins this round!";
+}
+
+function iaWinsRound() {
+    var winner = document.getElementById("winner");
+    winner.innerHTML = "The IA wins this round!";
+}
